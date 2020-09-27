@@ -1,29 +1,35 @@
 import React, { useEffect, useState } from "react";
 
-import { Container, Posters, CardInfo, CardImage, Description } from "./styles";
+import {
+  Container,
+  Posters,
+  CardInfo,
+  CardImage,
+  Description,
+  Price,
+  Button,
+  TextButton,
+} from "./styles";
 
 interface Products {
   des: string;
-  qtd: number;
   prv: number;
   img: string;
 }
 
 const Card: React.FC = () => {
-  const [products, setProducts] = useState<Products[]>();
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
-      await fetch("http://www.zbr.net.br/a17/")
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data);
-          setProducts(data);
+      const response = await fetch("http://www.zbr.net.br/a17/");
+      const data = await response.json();
+      const convertion = Object.values(data);
 
-          return data;
-        });
+      setProducts(convertion);
+      console.log(convertion);
+
+      return data;
     }
 
     fetchData();
@@ -32,24 +38,16 @@ const Card: React.FC = () => {
   return (
     <Container>
       <Posters>
-        {/* {Object.keys(products).forEach(function (
-          product: Products
-        ): JSX.Element {
-          return (
-            <CardInfo>
-              <CardImage />
-            </CardInfo>
-          );
-        })} */}
-
-        {/* <CardInfo>
-          {products.map((product) => (
-            <Description key={product.des}>{product.des}</Description>
-          ))}
-        </CardInfo> */}
-
-        {/* {typeof products !== undefined &&
-          products?.map((product) => <Description>{product.des}</Description>)} */}
+        {products.map((product: Products) => (
+          <CardInfo key={product.prv}>
+            <CardImage source={{ uri: product?.img }} />
+            <Description>{product.des}</Description>
+            <Price>R$ {product.prv}</Price>
+            <Button>
+              <TextButton>Quero</TextButton>
+            </Button>
+          </CardInfo>
+        ))}
       </Posters>
     </Container>
   );

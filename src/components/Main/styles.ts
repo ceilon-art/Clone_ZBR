@@ -11,4 +11,6 @@ export const MainText = styled.Text`
   align-self: center;
 `;
 
-export const Content = styled.View``;
+export const Content = styled.View`
+  margin-bottom: 150px;
+`;
